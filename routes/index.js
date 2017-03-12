@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var xml2js = require('xml2js');
-var parser = new xml2js.Parser({explicitArray: false});
-var request = require('request');
+
+var bus = require('../utils/bus');
+var geo = require('../utils/geo');
+var events = require('../utils/events');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -10,21 +11,22 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/directions', function(req, res, next){
-
-  request({
-    url: 'http://ruevents.rutgers.edu/events/getEventsRss.xml',
-    method: 'GET',
-    qs: {keyword: 'Congressman'},
-  }, function (error, response, body){
-    if (error){
-      console.log(error);
-    } else {
-      parser.parseString(response.body, function (err, result){
-        res.send(result);
+  events.eventSearch(req.query.keyword, function(err, result){
+    if (!err){
+      var place = result.rss.channel.item.eventlocation;
+      geo.coords(place, function(err, result){
+        if (!err){
+          res.send(result);
+        } else {
+          console.log(err);
+        }
       });
-
+    } else {
+      console.log(err);
     }
   });
+
+
 });
 
 module.exports = router;
