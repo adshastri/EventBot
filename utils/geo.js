@@ -4,6 +4,7 @@ var googleMaps = require('@google/maps');
 var googleMapsClient = googleMaps.createClient({
   key: settings.GOOGLE_MAPS_API_KEY,
 });
+var parallel = require('async/parallel');
 
 module.exports = {
   coords: function(name, callback){
@@ -23,7 +24,7 @@ module.exports = {
     });
   },
   stops: function(from, to, callback){
-    var result = {
+    /*var result = {
       to: {
         stop: '',
         time: '',
@@ -32,36 +33,47 @@ module.exports = {
         stop: '',
         time: '',
       }
+    }*/
+    parallel([function(callback2){
+      googleMapsClient.distanceMatrix({
+        origins: [from],
+        destinations: busPoints.campusPoints,
+        mode: 'walking',
+      }, function(err, response){
+          if (!err){
+            closestStopInfo(response, function(info){
+              console.log(info);
+              //result.to.stop = info.name;
+              //result.to.time = info.duration;
+              callback2(null, info);
+            });
+          } else {
+            console.log(err);
+          }
+      });
+    },
+    function(callback2) {
+      googleMapsClient.distanceMatrix({
+        origins: [to],
+        destinations: busPoints.campusPoints,
+        mode: 'walking',
+      }, function(err, response){
+          if (!err){
+            closestStopInfo(response, function(info){
+              console.log(info);
+              //result.from.stop = info.name;
+              //result.from.time = info.duration;
+              callback2(null, info);
+            });
+          } else {
+            console.log(err);
+          }
+      });
     }
-    googleMapsClient.distanceMatrix({
-      origins: [from],
-      destinations: busPoints.campusPoints,
-      mode: 'walking',
-    }, function(err, response){
-        if (!err){
-          closestStopInfo(response, function(info){
-            result.to.stop = info.name;
-            result.to.time = info.duration;
-            console.log(result);
-          });
-        } else {
-          console.log(err);
-        }
-    });
-    googleMapsClient.distanceMatrix({
-      origins: [to],
-      destinations: busPoints.campusPoints,
-      mode: 'walking',
-    }, function(err, response){
-        if (!err){
-          closestStopInfo(response, function(info){
-            result.from.stop = info.name;
-            result.from.time = info.duration;
-            console.log(result);
-          });
-        } else {
-          console.log(err);
-        }
+  ],
+    function(err, res) {
+      console.log(res);
+      callback(null, res);
     });
   }
 }
@@ -119,7 +131,11 @@ function closestStopInfo(response, callback){
         closestLeavingBusStop = campus[minIndex];
         //returnValue += busPoints.codes[busPoints.stops.indexOf(closestLeavingBusStop)];
         closestLeavingBusStopName = busPoints.names[busPoints.stops.indexOf(closestLeavingBusStop)];
-        callback({name: closestLeavingBusStopName, duration: result[minIndex].duration});
+        callback({
+          name: closestLeavingBusStopName,
+          code: busPoints.codes[busPoints.stops.indexOf(closestLeavingBusStop)],
+          duration: result[minIndex].duration
+        });
     } else {
       console.log(response.status);
       console.log("Could not find nearest campus.");

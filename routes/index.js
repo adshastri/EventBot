@@ -17,7 +17,7 @@ router.get('/directions', function(req, res, next){
       geo.coords(place, function(err, result){
         if (!err){
           geo.stops({lat: 40.502539, lng: -74.449542}, result, function(err, result) {
-            console.log("stops succeeded");
+            console.log(result);
           });
         } else {
           console.log(err);
