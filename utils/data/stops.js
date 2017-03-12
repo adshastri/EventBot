@@ -41,11 +41,18 @@ var livingstonPoint = {lat: 40.522865, lng: -74.436369};
 var douglassPoint = {lat: 40.491985, lng: -74.443466};
 var cookPoint = {lat: 40.484299, lng: -74.435104};
 
+var stops = [rutgerss, scott, stuactcntr, traine, lot48a, werblinback, hillw, science, libofsci, buschse, busch, buells, werblinm, beck, Livingston, quads, trainn, rockoff, pubsafs, cabaret, redoak, lipman, foodsci, biel, henders, katzenbach, gibbons, college, pubsafn, liberty, patersonn, zimmerli];
+var names = ["Rutgers Student Center", "Scott Hall", "Student Activities Center", "Train Station(College Ave)", "Visitors Center", "Werblin Reacreation Center(Back Entrance)", "Hill Center", "Science Building", "Library of Sciences", "Busch Suites", "Busch Campus Center", "Buell Apartments", "Werblin Recreation Center(Main Entrance)", "Livingston Plaza", "Livingston Student Center", "Quads", "Train Station(Douglass)", "Rockoff Hall", "Public Safety Building South", "Cabaret Theater", "Red Oak Lane", "Lipman Hall", "Food Sciences Building", "Biel Road", "Henderson", "Katzenbach", "Gibbons", "College Hall", "Public Safety Building North", "Liberty Street", "Paterson Street", "Zimmerli Arts Museum"];
+var codes = ["rutgerss", "scott","stuactcntr","traine","lot48a","werblinback","hillw","science","libofsci","buschse","busch","buells","werblinm","beck","Livingston","quads","trainn","rockoff","pubsafs","cabaret","redoak"," lipman","foodsci", "biel","henders","katzenbach","gibbons","college","pubsafn","liberty","patersonn","zimmerli"];
+
 module.exports = {
   collegeave: [rutgerss, scott, stuactcntr, traine, zimmerli],
   busch: [lot48a, werblinback, hillw, science, libofsci, buschse, busch, buells, werblinm],
   livingston: [beck, Livingston, quads],
   douglass: [trainn, rockoff, pubsafs, pubsafn, liberty, patersonn],
   cook: [cabaret, redoak, lipman, foodsci, biel, henders, katzenbach, gibbons, college],
-  campusPoints: [collegeAvePoint, buschPoint, livingstonPoint, douglassPoint, cookPoint]
+  campusPoints: [collegeAvePoint, buschPoint, livingstonPoint, douglassPoint, cookPoint],
+  stops: stops,
+  names: names,
+  codes: codes
 }

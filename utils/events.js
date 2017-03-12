@@ -17,7 +17,6 @@ module.exports = {
         callback(new Error("events api error"), null);
       } else {
         parseString(response.body, {explicitArray: false, tagNameProcessors: [stripPrefix]}, function (err, result){
-          console.log("in parser callback");
           if (err){
             console.log(err);
             callback(new Error("xml parser error"), null);

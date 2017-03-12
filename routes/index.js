@@ -16,7 +16,9 @@ router.get('/directions', function(req, res, next){
       var place = result.rss.channel.item.eventlocation;
       geo.coords(place, function(err, result){
         if (!err){
-          res.send(result);
+          geo.stops({lat: 40.502539, lng: -74.449542}, result, function(err, result) {
+            console.log("stops succeeded");
+          });
         } else {
           console.log(err);
         }
